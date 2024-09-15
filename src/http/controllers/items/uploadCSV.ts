@@ -10,9 +10,6 @@ async function uploadCSVController(request: FastifyRequest, reply: FastifyReply,
   const verifyInstallmentMatchesTotalValueUseCase = new VerifyInstallmentMatchesTotalValueUseCase()
   const formatToCurrencyUseCase = new FormatToCurrencyUseCase()
 
-  console.log({ file })
-
-
   const items = await parseCsvUseCase.execute(file.path)
 
   // TODO, tipar com a conecção com o banco de dados 
