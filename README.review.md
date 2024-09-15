@@ -17,4 +17,4 @@
 
 [x] - Implementaremos uma função para validar o campo nrCpfCnpj e verificar se ele é um CPF ou CNPJ válido, seguindo as regras de validação apropriadas para cada formato. Parte de todos os CPF e CNPJ sao invalidos, usamos um script para gerar dados fictícios. 
 
-[ ] - Dividiremos o valor de `vlTotal` pela quantidade de prestações (`qtPrestacoes`). Verificaremos se o resultado dessa divisão é igual ao valor de `vlPresta` para cada prestação, garantindo que os cálculos estejam corretos e consistentes.
+[x] - Dividiremos o valor de `vlTotal` pela quantidade de prestações (`qtPrestacoes`). Verificaremos se o resultado dessa divisão é igual ao valor de `vlPresta` para cada prestação, garantindo que os cálculos estejam corretos e consistentes.
