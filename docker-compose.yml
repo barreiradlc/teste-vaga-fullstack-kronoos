@@ -1,0 +1,70 @@
+services:
+  mongo1:
+    image: mongo:latest
+    container_name: mongo1
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/etc/mongo-keyfile", "--auth"]
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_REPLICA_SET_NAME=rs0
+      - PRISMA_CLI_BINARY_TARGETS='debian-openssl-3.0.x'
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-keyfile:/etc/mongo-keyfile
+      - mongo1-data:/data/db/
+
+  mongo2:
+    image: mongo:latest
+    container_name: mongo2
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/etc/mongo-keyfile", "--auth"]
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_REPLICA_SET_NAME=rs0
+      - PRISMA_CLI_BINARY_TARGETS='debian-openssl-3.0.x'
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./mongo-keyfile:/etc/mongo-keyfile
+      - mongo2-data:/data/db/
+
+  mongo3:
+    image: mongo:latest
+    container_name: mongo3
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/etc/mongo-keyfile", "--auth"]
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_REPLICA_SET_NAME=rs0
+      - PRISMA_CLI_BINARY_TARGETS='debian-openssl-3.0.x'
+    ports:
+      - "27019:27017"
+    volumes:
+      - ./mongo-keyfile:/etc/mongo-keyfile
+      - mongo3-data:/data/db/
+      
+  app:
+    build: .
+    container_name: node-app
+    restart: always
+    ports:
+      - "3333:3333"
+      - "5555:5555"
+    command: npm run start:dev
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    environment:
+      - DATABASE_URL=mongodb://root:password@mongo1:27017,mongo2:27017,mongo3:27017/mydb?replicaSet=rs0&authSource=admin    
+
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:
