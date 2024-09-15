@@ -4,18 +4,33 @@
   "description": "Você foi designado para desenvolver uma aplicação que deve lidar com grandes volumes de dados. Você deve rodar as seguintes validações e tratativas para cada um dos dados do arquivo e mostrar um retorno ao concluir a rotina. A aplicação será responsável por fornecer uma massa de dados considerável (cerca de 30GB) e deve ser capaz de lidar com dados fornecidos.",
   "main": "index.js",
   "scripts": {
+    "start:dev": "tsx watch src/server.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.5.5",
+    "@vitest/coverage-istanbul": "^2.1.1",
     "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
+    "tsup": "^8.2.4",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.2",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.1"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "fastify-multer": "^2.0.3",
+    "multer": "^1.4.5-lts.1",
+    "zod": "^3.23.8"
   }
 }
