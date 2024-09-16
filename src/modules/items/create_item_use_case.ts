@@ -6,7 +6,7 @@ class CreateItemUseCase {
     private itemRepository: ItemRepository
   ) { }
 
-  async execute(request: Prisma.ItemCreateInput) {
+  async execute(request: Prisma.ItemCreateInput) {    
     const item = await this.itemRepository.create(request)
 
     return item
