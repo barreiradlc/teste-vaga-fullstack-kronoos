@@ -7,6 +7,6 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="file"; filename="data.sample.csv"
 Content-Type: text/csv
 
-< ./data.sample.csv
+< assets/data.sample.csv
 --boundary--
 ### -------------------------------------------------------------------------
