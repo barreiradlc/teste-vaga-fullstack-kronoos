@@ -20,9 +20,11 @@ describe("VerifyDocumentUseCase", () => {
     it('should be able to retrieve and exception if the CPF is in a invalid format', async () => {
       let document = '06529946110'
 
-      let result = await sut.execute(document)
-
-      expect(result).toBeFalsy()
+      await expect(() =>
+        sut.execute(document),
+      )
+        .rejects
+        .toBeInstanceOf(Error)
     })
   })
   suite('Verify CNPJ', async () => {
@@ -37,10 +39,22 @@ describe("VerifyDocumentUseCase", () => {
     it('should be able to retrieve and exception if the CNPJ is in a invalid format', async () => {
       let document = '11444777000171'
 
-      let result = await sut.execute(document)
-
-      expect(result).toBeFalsy()
+      await expect(() =>
+        sut.execute(document),
+      )
+        .rejects
+        .toBeInstanceOf(Error)
     })
+  })
+
+  it('should be able to retrieve and exception if the document have an invalid lenght', async () => {
+    let document = '114447770001710'
+
+    await expect(() =>
+      sut.execute(document),
+    )
+      .rejects
+      .toBeInstanceOf(Error)
   })
 
 })

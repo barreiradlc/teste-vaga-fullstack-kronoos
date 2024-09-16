@@ -11,7 +11,11 @@ class VerifyInstallmentMatchesTotalValueUseCase {
     const valueExpected = formatNumberTo2DecimalPlaces(vlPresta)
     const valueReached = formatNumberTo2DecimalPlaces(formatNumberTo2DecimalPlaces(vlTotal) / Number(qtPrestacoes))
 
-    return valueExpected === valueReached
+    if (valueExpected === valueReached) {
+      return true
+    }
+    throw new Error(`Installment parcels and total does not match: ${formatNumberTo2DecimalPlaces(vlTotal)} ÷ ${Number(qtPrestacoes)} = ${formatNumberTo2DecimalPlaces(vlPresta)}`);
+
   }
 }
 

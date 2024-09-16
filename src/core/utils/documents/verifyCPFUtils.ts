@@ -52,7 +52,8 @@ function verifyCPF(cpfNumber: string) {
   if (isFirstDigitValid && isSecondDigitValid) {
     return true
   }
-  return false
+  throw new Error(`Invalid CPF: ${cpfNumber}`);
+
 }
 
 export { verifyCPF }

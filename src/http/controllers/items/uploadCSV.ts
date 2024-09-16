@@ -7,6 +7,10 @@ import { VerifyInstallmentMatchesTotalValueUseCase } from "src/modules/documents
 import { CreateItemUseCase } from "src/modules/items/create_item_use_case";
 import { PrismaItemRepository } from 'src/repositories/item/prisma/item-repository';
 
+interface ErrorPayloadDTO {
+  message: string
+}
+
 async function uploadCSVController(request: FastifyRequest, reply: FastifyReply, file: any) {
   const itemRepository = new PrismaItemRepository()
   const createItemUseCase = new CreateItemUseCase(itemRepository)
@@ -18,33 +22,39 @@ async function uploadCSVController(request: FastifyRequest, reply: FastifyReply,
 
   const items = await parseCsvUseCase.execute(file.path)
 
-  const createdItems = []
+  const createdItems = [] as Prisma.ItemCreateInput[]
 
   for (const item of items as Prisma.ItemCreateInput[]) {
     const { qtPrestacoes, vlPresta, vlTotal, nrCpfCnpj } = item
-    const errors = []
+    const errors = [] as ErrorPayloadDTO[]
 
-    const isInstallmentMatchingTotalValue = verifyInstallmentMatchesTotalValueUseCase.execute({
-      qtPrestacoes,
-      vlPresta,
-      vlTotal
-    })
-
-    if (!isInstallmentMatchingTotalValue) {
-      errors.push({
-        message: `O calculo de prestações e valor total não fecha ${qtPrestacoes} * ${vlTotal} !== ${vlPresta}`
-      })
+    try {
+      await verifyInstallmentMatchesTotalValueUseCase.execute({
+        qtPrestacoes,
+        vlPresta,
+        vlTotal
+      })      
+    } catch (error) {
+      if (error instanceof Error) {
+        const { message } = error
+        errors.push({
+          message: message
+        })
+      }
     }
 
-    const isDocumentValid = verifyDocumentUseCase.execute(nrCpfCnpj)
-
-    if (!isDocumentValid) {
-      errors.push({
-        message: `O documento fornceido está com um formato inválido`
-      })
+    try {
+      await verifyDocumentUseCase.execute(nrCpfCnpj)
+    } catch (error) {
+      if (error instanceof Error) {
+        const { message } = error
+        errors.push({
+          message: message
+        })
+      }
     }
 
-    // Destructure number values
+    // Destructure monetary values
     const {
       // vlTotal,  Previamente atribuido
       // vlPresta, Previamente atribuido
@@ -56,38 +66,24 @@ async function uploadCSVController(request: FastifyRequest, reply: FastifyReply,
       vlAtual
     } = item
 
-    console.log({ errors })
-
-    let createdItem
-    if (!!errors.length) {
-      createdItem = await createItemUseCase.execute({
-        ...item,
-        vlMora: formatToCurrencyUseCase.execute(vlMora),
-        vlMulta: formatToCurrencyUseCase.execute(vlMulta),
-        vlOutAcr: formatToCurrencyUseCase.execute(vlOutAcr),
-        vlIof: formatToCurrencyUseCase.execute(vlIof),
-        vlDescon: formatToCurrencyUseCase.execute(vlDescon),
-        vlAtual: formatToCurrencyUseCase.execute(vlAtual),
-        errors: {
-          create: [
-            errors
-          ]
-        }
-      })
-    } else {
-      createdItem = await createItemUseCase.execute({
-        ...item,
-        vlMora: formatToCurrencyUseCase.execute(vlMora),
-        vlMulta: formatToCurrencyUseCase.execute(vlMulta),
-        vlOutAcr: formatToCurrencyUseCase.execute(vlOutAcr),
-        vlIof: formatToCurrencyUseCase.execute(vlIof),
-        vlDescon: formatToCurrencyUseCase.execute(vlDescon),
-        vlAtual: formatToCurrencyUseCase.execute(vlAtual)
-      })
-    }
+    let createdItem = await createItemUseCase.execute({
+      ...item,
+      vlTotal: formatToCurrencyUseCase.execute(vlTotal),
+      vlPresta: formatToCurrencyUseCase.execute(vlPresta),
+      vlMora: formatToCurrencyUseCase.execute(vlMora),
+      vlMulta: formatToCurrencyUseCase.execute(vlMulta),
+      vlOutAcr: formatToCurrencyUseCase.execute(vlOutAcr),
+      vlIof: formatToCurrencyUseCase.execute(vlIof),
+      vlDescon: formatToCurrencyUseCase.execute(vlDescon),
+      vlAtual: formatToCurrencyUseCase.execute(vlAtual),
+      errors: {
+        create: [
+          ...errors
+        ]
+      }
+    })
 
     createdItems.push(createdItem)
-
   }
 
   return reply.send({

@@ -9,7 +9,7 @@ class VerifyDocumentUseCase {
       return verifyCNPJ(documentNumber)
     }
 
-    throw new Error("Invalid document");    
+    throw new Error(`Invalid document, neigther a cpf nor a cnpj: ${documentNumber}`);    
   }
 }
 

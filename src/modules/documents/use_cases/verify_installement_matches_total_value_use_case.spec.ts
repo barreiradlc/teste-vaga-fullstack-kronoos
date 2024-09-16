@@ -33,9 +33,11 @@ describe("VerifyInstallmentMatchesTotalValueUseCase", () => {
       vlPresta: '17524.03',
     }
 
-    const result = await sut.execute(item)
-
-    expect(result).toBeFalsy()
+    await expect(() =>
+      sut.execute(item),
+    )
+      .rejects
+      .toBeInstanceOf(Error)
   })
 
 })

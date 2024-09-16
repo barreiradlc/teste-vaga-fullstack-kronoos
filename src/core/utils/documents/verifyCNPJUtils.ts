@@ -62,7 +62,7 @@ function verifyCNPJ(cnpjNumber: string) {
     return true
   }
 
-  return false
+  throw new Error(`Invalid CNPJ: ${cnpjNumber}`);
 }
 
 export { verifyCNPJ }
