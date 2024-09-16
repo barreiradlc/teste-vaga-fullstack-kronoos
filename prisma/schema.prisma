@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Error {
+model ItemError {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   message   String
   item      Item   @relation(fields: [itemId], references: [id])
@@ -50,5 +50,5 @@ model Item {
   vlAtual       String
   idSituac      String
   idSitVen      String
-  errors        Error[]
+  errors        ItemError[]
 }
