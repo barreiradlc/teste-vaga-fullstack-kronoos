@@ -8,7 +8,8 @@ class PrismaItemRepository implements ItemRepository {
   async create(data: Prisma.ItemCreateInput) {
     try {
       const item = await prisma.item.create({
-        data, include: {
+        data,
+        include: {
           errors: true
         }
       })

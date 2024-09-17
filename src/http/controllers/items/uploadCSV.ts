@@ -77,9 +77,9 @@ async function uploadCSVController(request: FastifyRequest, reply: FastifyReply,
       vlDescon: formatToCurrencyUseCase.execute(vlDescon),
       vlAtual: formatToCurrencyUseCase.execute(vlAtual),
       errors: {
-        create: [
-          ...errors
-        ]
+        createMany: {
+          data: errors
+        }
       }
     })
 
