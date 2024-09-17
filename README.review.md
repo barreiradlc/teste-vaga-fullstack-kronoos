@@ -38,13 +38,16 @@
 Testes unitários estão implementados nos casos de uso para averiguar seu funcionamento esperado.
 Para executar eles basta executar `make test`.
 
-## Docker
-
-A aplicação está em docker, sendo assim os simples domandos `make prisma-g && make prisma-p` e logo após `make up-build` será o bastante para vê-lo functionar
 
 ## Banco de dados
 
 Para um primeiro contato vamos precisar configurar as replicasets para nosso projeto com os seguintes comandos:
+
+> Antes de mais nada devemos subir nossa intância do app de preferencia desacoplado:
+
+```sh
+  docker compose up -d
+```
 
 > Com este comando entramos no banco
 
@@ -71,6 +74,10 @@ Para um primeiro contato vamos precisar configurar as replicasets para nosso pro
 ```sh 
   rs.status()
 ```
+
+## Docker
+
+A aplicação está em docker, sendo assim os simples domandos `make prisma-g && make prisma-p` e logo após `make up-build` será o bastante para vê-lo funcionar, tendo configurado corretamente o passo anterior.
 
 
 # Changelog 
