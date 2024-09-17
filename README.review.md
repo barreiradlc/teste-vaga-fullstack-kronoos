@@ -42,6 +42,37 @@ Para executar eles basta executar `make test`.
 
 A aplicação está em docker, sendo assim os simples domandos `make prisma-g && make prisma-p` e logo após `make up-build` será o bastante para vê-lo functionar
 
+## Banco de dados
+
+Para um primeiro contato vamos precisar configurar as replicasets para nosso projeto com os seguintes comandos:
+
+> Com este comando entramos no banco
+
+```sh 
+  docker exec -it mongo1 mongosh --username root --password password
+```
+
+> E assim podemos inicializar nossa replicaset
+
+```mongo
+  rs.initiate({
+    _id: "rs0",
+    members: [
+      { _id: 0, host: "mongo1:27017" },
+      { _id: 1, host: "mongo2:27017" },
+      { _id: 2, host: "mongo3:27017" }
+    ]
+  })
+
+```
+
+> E para verificar se está tudo bem, execute:
+
+```sh 
+  rs.status()
+```
+
+
 # Changelog 
 
 ## V1
