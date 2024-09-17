@@ -6,17 +6,17 @@ build:
 up:
 	docker compose up
 
+up-w:
+	docker compose up --watch
+
 up-build:
-	docker compose up --build
+	docker compose up -d --build
 
 prisma-g:
 	docker compose run $(CONTAINER_NAME) npx prisma generate
 
 prisma-p:
 	docker compose run $(CONTAINER_NAME) npx prisma db push
-
-prisma-s:
-	docker compose run $(CONTAINER_NAME) npx prisma studio
 
 test:
 	docker compose run $(CONTAINER_NAME) npm run test:watch
