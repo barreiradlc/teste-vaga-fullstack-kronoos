@@ -10,7 +10,7 @@ describe("ParseCsvUseCase", () => {
   })
 
   it('Should be able to parse CSV file', async () => {
-    let path = 'assets/data.csv'
+    let path = 'assets/data.sample.csv'
 
     let result: Item[] = await sut.execute(path)    
 
