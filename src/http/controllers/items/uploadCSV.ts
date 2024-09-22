@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Item, Prisma } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { FormatToCurrencyUseCase } from "src/modules/documents/use_cases/format_to_currency_use_case";
 import { ParseCsvUseCase } from "src/modules/documents/use_cases/parse_csv_use_case";
@@ -22,7 +22,7 @@ async function uploadCSVController(request: FastifyRequest, reply: FastifyReply,
 
   const items = await parseCsvUseCase.execute(file.path)
 
-  const createdItems = [] as Prisma.ItemCreateInput[]
+  const createdItems = [] as Item[]
 
   for (const item of items as Prisma.ItemCreateInput[]) {
     const { qtPrestacoes, vlPresta, vlTotal, nrCpfCnpj } = item

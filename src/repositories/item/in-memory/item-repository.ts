@@ -9,7 +9,8 @@ class InMemoryItemRepository implements ItemRepository {
   async create(data: Prisma.ItemCreateInput) {
     const item = {
       ...data,
-      id: randomUUID()
+      id: randomUUID(),
+      errors: []
     }
 
     this.items.push(item)
